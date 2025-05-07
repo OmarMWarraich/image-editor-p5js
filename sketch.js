@@ -275,6 +275,6 @@ function ConvertToSVG() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     },
-    "posterized2"
+    "default"
   );
 }
