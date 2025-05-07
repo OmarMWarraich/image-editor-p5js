@@ -39,6 +39,11 @@ function setup() {
   let removeBgButton = createButton("Remove BG");
   removeBgButton.position(200, 70);
   removeBgButton.mousePressed(removeBackground);
+
+  // Button to convert to SVG
+  let convertSvgButton = createButton("Convert to SVG");
+  convertSvgButton.position(300, 70);
+  convertSvgButton.mousePressed(ConvertToSVG);
 }
 
 function draw() {
@@ -245,4 +250,31 @@ function removeBackground() {
   }
   img.updatePixels();
   save(img, "updated_image.png");
+}
+
+function ConvertToSVG() {
+  if (!img) return;
+
+  // Create a temporary canvas to get the image as a data URL
+  let tempCanvas = createGraphics(img.width, img.height);
+  tempCanvas.image(img, 0, 0, img.width, img.height);
+  let dataUrl = tempCanvas.canvas.toDataURL("image/png");
+
+  // Use ImageTracer to convert the image to SVG
+  ImageTracer.imageToSVG(
+    dataUrl,
+    function (svgstr) {
+      // Save SVG to disk
+      let blob = new Blob([svgstr], { type: "image/svg+xml" });
+      let url = URL.createObjectURL(blob);
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "converted_image.svg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    },
+    "posterized2"
+  );
 }

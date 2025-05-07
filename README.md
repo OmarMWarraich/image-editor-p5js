@@ -2,43 +2,47 @@
 
 ## Description
 
-This is a simple image editor built with P5.js. It allows you to load an image, crop it, and save the cropped image. The editor provides a canvas where you can draw a circle around the area you want to crop. The cropped image can be saved as a PNG file. Furthermore, the editor allows you to remove the background of the image using a color picker. The editor is designed to be user-friendly and intuitive, making it easy for anyone to use.
+This project is a lightweight image editor built using P5.js. It enables users to load images, crop specific areas, and save the cropped results as PNG files. The editor also includes a background removal feature powered by a color picker, making it versatile for basic image editing tasks. With its intuitive design and user-friendly interface, this tool is accessible to users of all skill levels.
 
 ## Features
 
-- Load an image from your computer
-- Draw a circle around the area you want to crop
-- Crop the image to the selected area
-- Save the cropped image as a PNG file
-- Remove the background of the image using a color picker
-- User-friendly interface
-- Intuitive design
+- Upload images directly from your device.
+- Draw a circular selection to define the crop area.
+- Crop images to the selected region.
+- Save cropped images in PNG format.
+- Remove image backgrounds using a color picker tool.
+- Simple and intuitive user interface.
 
 ## Technologies Used
 
-- P5.js
-- HTML
+- **P5.js**: A JavaScript library for creative coding.
+- **HTML**: For structuring the application.
 
 ## Installation
 
-1. Clone the repository to your local machine.
+1. Clone the repository to your local machine:
 
    ```bash
    git clone https://github.com/OmarMWarraich/image-editor-p5js.git
    ```
 
-2. Open the `index.html` file in your web browser.
+2. Open the `index.html` file in your preferred web browser:
+
    ```bash
    open index.html
    ```
 
-## Future Improvements
+## Future Enhancements
 
-- Add more image editing features (e.g., filters, resizing, rotating)
-- Improve the user interface
-- Add support for more image formats
-- Optimize the code for better performance
-- Add more customization options for the cropping tool
-- Implement undo/redo functionality
-- Add a help section or tutorial for new users
-- Improve the background removal feature to work with more complex images
+- Introduce advanced editing features like filters, resizing, and rotation.
+- Enhance the user interface for a more modern look.
+- Expand support for additional image formats.
+- Optimize performance for handling larger images.
+- Add customization options for cropping shapes and sizes.
+- Implement undo/redo functionality for better control.
+- Include a help section or tutorial for first-time users.
+- Improve the background removal tool for complex images.
+
+## Acknowledgments
+
+- [P5.js](https://p5js.org/) - A JavaScript library for creative coding.
