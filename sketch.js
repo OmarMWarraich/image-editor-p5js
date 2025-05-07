@@ -7,6 +7,12 @@ let croppedImage;
 let cropButton;
 let cropCircle = null;
 
+// New variables for color picker
+let pickedColor = [255, 255, 255];
+let colorInput;
+let pickColorButton;
+let pickingColor = false;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   input = createFileInput(handleFile);
@@ -16,6 +22,23 @@ function setup() {
   cropButton.position(10, 40);
   cropButton.mousePressed(cropImage);
   cropButton.hide();
+
+  // Color input for manual entry
+  colorInput = createInput("#ffffff");
+  colorInput.position(10, 70);
+  colorInput.size(80);
+
+  // Button to pick color from image
+  pickColorButton = createButton("Pick Color");
+  pickColorButton.position(100, 70);
+  pickColorButton.mousePressed(() => {
+    pickingColor = true;
+  });
+
+  // Button to remove background
+  let removeBgButton = createButton("Remove BG");
+  removeBgButton.position(200, 70);
+  removeBgButton.mousePressed(removeBackground);
 }
 
 function draw() {
@@ -48,6 +71,11 @@ function draw() {
       strokeWeight(2);
       ellipse(cropCircle.x, cropCircle.y, cropCircle.d, cropCircle.d);
     }
+
+    // Show picked color swatch
+    fill(pickedColor);
+    stroke(0);
+    rect(300, 70, 30, 30);
   }
 
   if (croppedImage) {
@@ -65,6 +93,23 @@ function handleFile(file) {
 }
 
 function mousePressed() {
+  if (pickingColor && img) {
+    // Get color from image at mouse position
+    let x = Math.round((mouseX - 50) * 2);
+    let y = Math.round((mouseY - 50) * 2);
+    if (x >= 0 && y >= 0 && x < img.width && y < img.height) {
+      img.loadPixels();
+      let idx = 4 * (y * img.width + x);
+      pickedColor = [img.pixels[idx], img.pixels[idx + 1], img.pixels[idx + 2]];
+      // Update color input as hex
+      colorInput.value(
+        rgbToHex(pickedColor[0], pickedColor[1], pickedColor[2])
+      );
+    }
+    pickingColor = false;
+    return;
+  }
+
   if (
     img &&
     mouseX >= 50 &&
@@ -150,4 +195,54 @@ function cropImage() {
   saveCanvas(croppedImage, "cropped_image", "png");
   cropReady = false;
   cropButton.hide();
+}
+
+// Utility: Convert RGB to HEX
+function rgbToHex(r, g, b) {
+  return (
+    "#" +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+      })
+      .join("")
+  );
+}
+
+// Utility: Convert HEX to RGB
+function hexToRgb(hex) {
+  hex = hex.replace("#", "");
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((x) => x + x)
+      .join("");
+  }
+  let num = parseInt(hex, 16);
+  return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+}
+
+// Remove background matching picked color
+function removeBackground() {
+  if (!img) return;
+  let hex = colorInput.value();
+  let [rT, gT, bT] = hexToRgb(hex);
+  let threshold = 20; // tolerance
+
+  img.loadPixels();
+  for (let i = 0; i < img.pixels.length; i += 4) {
+    let r = img.pixels[i];
+    let g = img.pixels[i + 1];
+    let b = img.pixels[i + 2];
+    if (
+      abs(r - rT) < threshold &&
+      abs(g - gT) < threshold &&
+      abs(b - bT) < threshold
+    ) {
+      img.pixels[i + 3] = 0;
+    }
+  }
+  img.updatePixels();
+  save(img, "updated_image.png");
 }
